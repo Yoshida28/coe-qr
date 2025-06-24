@@ -1,0 +1,154 @@
+This is a Control Portal for SRMIST Examination Management
+
+Students can log in via Google Auth (only @srmap.edu.in emails allowed)
+
+Three types of users:
+
+Student
+
+Admin
+
+SuperAdmin
+
+Students can submit requests with/without attachments like PDF, Excel, Images
+
+Each Admin is assigned a department (like BTech, MTech, PhD)
+
+Admins can resolve or escalate requests
+
+SuperAdmins handle escalated requests
+
+Students can view their request history and status updates
+
+Emails sent to students when request status changes (via Brevo API)
+
+📌 📖 Tables Description (Supabase)
+Feed this schema knowledge to Bolt:
+
+Users Table
+user_id (primary key)
+
+user_email
+
+user_role (Student / Admin / SuperAdmin)
+
+user_name
+
+user_registration_number
+
+user_campus
+
+user_department
+
+Note: Admin and SuperAdmin users are pre-added manually via DB, no signup.
+
+Requests Table
+request_id (primary key)
+
+request_sender_id (FK to Users)
+
+request_title
+
+request_content
+
+request_media (PDF, Image, Excel URL)
+
+request_created_at
+
+request_updated_at
+
+request_status (Pending / Resolved / Escalated / Terminated)
+
+RequestSolutions Table
+solution_id (primary key)
+
+solution_given_by (FK to Users)
+
+solution_for_request_id (FK to Requests)
+
+solution_title
+
+solution_content
+
+solution_media
+
+solution_created_at
+
+SuperAdminRequests Table
+super_admin_request_id (primary key)
+
+request_id (FK to Requests)
+
+📌 📖 Workflow Logic
+Login via Supabase Google Auth
+
+Only allow @srmap.edu.in emails.
+
+Students complete profile form on first login.
+
+Admin/SuperAdmin details are already in DB.
+
+Students can
+
+Submit a new request (with optional media).
+
+View request history and statuses.
+
+Admins can
+
+See requests only from their assigned department.
+
+Resolve a request (add a solution) or escalate it.
+
+On resolving, send a mail via Brevo and update status.
+
+SuperAdmins can
+
+See escalated requests.
+
+Resolve or terminate them.
+
+Send a mail via Brevo when done and update status.
+
+📌 📖 Departments
+Departments for requests and admins:
+
+BTech
+
+MTech
+
+PhD
+
+Each admin gets only one department assigned.
+Requests have a department dropdown for students when creating one.
+
+📌 📖 Email Service (Brevo)
+On status updates (Resolve / Terminate), send a transactional mail to the request sender using Brevo.
+
+📌 📖 Frontend UI Requirements
+Glassmorphism floating request form (dialog/modal)
+
+Student dashboard: Table with request title, status, date, attachment
+
+Admin dashboard: Filtered requests for their department with actions (Resolve/Escalate)
+
+SuperAdmin dashboard: Escalated requests list with actions
+
+File uploads integrated with Supabase Storage.
+
+✅ In Summary:
+You need to give Bolt:
+
+Project purpose and role workflow
+
+Supabase table structure and field definitions
+
+User permission logic
+
+Request status states
+
+Department system and how admins are assigned
+
+Brevo integration on status change
+
+UI component expectations (dialogs, tables, modals, file uploads)
